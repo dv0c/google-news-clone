@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import Parser from "rss-parser";
-import { prisma } from "@/lib/prisma"; // Adjust import path
+import { prisma } from "@/lib/prisma";
 
 const FEEDS = [
   "https://www.newsit.gr/feed",
@@ -8,7 +8,6 @@ const FEEDS = [
   "https://unboxholics.com/news?format=rss",
   "https://www.protothema.gr/rss",
   "https://www.naftemporiki.gr/feed/",
-  "https://www.newsit.gr/feed",
   "https://ilia.news/feed/",
   "https://www.in.gr/feed",
   "https://www.ilialive.gr/newsfeed?format=feed",
@@ -32,6 +31,30 @@ type CustomItem = {
 
 const parser: Parser<{}, CustomItem> = new Parser();
 
+// Favicon fetcher
+async function fetchFavicon(siteUrl: string): Promise<string | null> {
+  try {
+    const origin = new URL(siteUrl).origin;
+    const res = await fetch(origin);
+    const html = await res.text();
+
+    const match =
+      html.match(/<link[^>]+rel=["'](?:shortcut icon|icon)["'][^>]*href=["']([^"']+)["']/i) ||
+      html.match(/<link[^>]+href=["']([^"']+)["'][^>]*rel=["'](?:shortcut icon|icon)["']/i);
+
+    if (match?.[1]) {
+      const href = match[1];
+      if (href.startsWith("http")) return href;
+      return origin + (href.startsWith("/") ? href : `/${href}`);
+    }
+
+    return `${origin}/favicon.ico`;
+  } catch {
+    return null;
+  }
+}
+
+// OG image fetcher
 async function fetchOgImage(url: string): Promise<string | null> {
   try {
     const res = await fetch(url);
@@ -45,7 +68,7 @@ async function fetchOgImage(url: string): Promise<string | null> {
   }
 }
 
-// Internal helper to create article (similar to your POST route logic)
+// Create article with deduplication
 async function createArticle(data: {
   title: string;
   content: string;
@@ -63,7 +86,6 @@ async function createArticle(data: {
   contentEncoded?: string;
   websiteId?: string | null;
 }) {
-  // Check if article exists by title (case insensitive)
   const existingArticle = await prisma.article.findFirst({
     where: {
       title: {
@@ -72,11 +94,11 @@ async function createArticle(data: {
       },
     },
   });
+
   if (existingArticle) {
     return { exists: true, article: existingArticle };
   }
 
-  // Create new article
   const article = await prisma.article.create({
     data: {
       title: data.title,
@@ -100,33 +122,34 @@ async function createArticle(data: {
   return { exists: false, article };
 }
 
+// Main GET route
 export async function GET() {
   try {
-    // Load all websites into map
     const allWebsites = await prisma.website.findMany({
       select: { id: true, url: true, name: true, favicon: true },
     });
+
     const websiteMap = new Map(allWebsites.map((w) => [w.url, w]));
 
     for (const feedUrl of FEEDS) {
       const feed = await parser.parseURL(feedUrl);
-      const siteUrl = new URL(feed.link || feedUrl).origin;
+      const siteOrigin = new URL(feed.link || feedUrl).origin;
 
-      // Get or create website in memory map
-      let website = websiteMap.get(siteUrl);
+      let website = websiteMap.get(siteOrigin);
+
       if (!website) {
+        const favicon = await fetchFavicon(siteOrigin);
         website = await prisma.website.create({
           data: {
-            url: siteUrl,
-            name: feed.title || siteUrl,
-            favicon: null,
+            url: siteOrigin,
+            name: feed.title || siteOrigin,
+            favicon: favicon,
           },
         });
-        websiteMap.set(siteUrl, website);
+        websiteMap.set(siteOrigin, website);
       }
 
       for (const item of feed.items) {
-        // Skip if no title
         if (!item.title) continue;
 
         const thumbnail =

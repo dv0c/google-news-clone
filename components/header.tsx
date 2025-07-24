@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button"
 import { SearchBar } from "./search-bar"
 import { Navigation } from "./navigation"
 import Link from "next/link"
+import { AuthPopup } from "./AuthPopup"
+import { NotificationPopup } from "./NotificationPopup"
 
 interface HeaderProps {
   activeTab: string
@@ -31,18 +33,16 @@ export function Header({ activeTab }: HeaderProps) {
 
           {/* Profile & Settings */}
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="text-white rounded-full hover:bg-gray-700">
-              <Search className="w-5 h-5" />
-            </Button>
-            <Button variant="ghost" size="icon" className="text-white rounded-full hover:bg-gray-700">
-              <Bell className="w-5 h-5" />
-            </Button>
-            <Button variant="ghost" size="icon" className="text-white rounded-full hover:bg-gray-700">
+            <div className="flex justify-end p-4 gap-4">
+              <NotificationPopup />
+              {/* Optional: <AuthPopup /> */}
+            </div>
+            {/* <Button variant="ghost" size="icon" className="text-white rounded-full hover:bg-gray-700">
               <Settings className="w-5 h-5" />
-            </Button>
-            <Button variant="ghost" size="icon" className="text-white rounded-full hover:bg-gray-700">
-              <User className="w-5 h-5" />
-            </Button>
+            </Button> */}
+            <div className="flex justify-end p-4">
+              <AuthPopup />
+            </div>
           </div>
         </div>
 

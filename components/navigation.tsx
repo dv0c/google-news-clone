@@ -14,7 +14,7 @@ export function Navigation({ activeTab }: NavigationProps) {
     { id: "greece", label: "Greece" },
     { id: "world", label: "World" },
     { id: "local", label: "Local" },
-    { id: "γαστουνη", label: "Γαστούνη" },
+    { id: "ανδραβίδα", label: "Ανδραβίδα" },
     { id: "tech", label: "Tech" },
     { id: "entertainment", label: "Entertainment" },
     { id: "sports", label: "Sports" },

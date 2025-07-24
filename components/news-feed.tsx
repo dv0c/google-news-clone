@@ -3,48 +3,62 @@ import { ArticleItem } from "./Article"
 import TabWrapper from "./TabWrapper"
 
 interface NewsFeedProps {
-  featured: Article
-  related: Article[]
-  others: Article[]
+  featured?: Article;
+  related?: Article[];
+  others?: Article[];
 }
 
-export function NewsFeed({ featured, related, others }: NewsFeedProps) {
+export function NewsFeed({ featured, related = [], others = [] }: NewsFeedProps) {
+  const hasFeatured = !!featured;
+  const hasRelated = related.length >= 1;
+  const hasOthers = others.length >= 1;
+
+  const renderOnlyList = !hasFeatured && !hasRelated;
+
   return (
     <TabWrapper title="Ειδήσεις" icon={<IconSVG />}>
-      {/* Featured Article */}
-      <div className="flex md:flex-row flex-col gap-4">
-        {/* <div onClick={() => onArticleClick(featured.id)}> */}
-        {featured && (
-          <div>
-            <ArticleItem article={featured} variant="big" />
-          </div>
-        )}
-        {/* Related Articles (same category) */}
-        <div className="flex flex-col gap-4">
-          {related.length > 0 && (
-            <div className="flex gap flex-col">
-              {related.slice(0,3).map((article) => (
-                <div key={article.id}>
-                  <ArticleItem article={article} variant="small" />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Other Articles (list layout) */}
-      {related.length > 0 && (
-        <div className="flex flex-col mt-5">
-          {related.slice(4, 7).map((article) => (
+      {renderOnlyList ? (
+        <div className="flex flex-col">
+          {[...related, ...others].map((article) => (
             <div key={article.id}>
               <ArticleItem article={article} variant="list" />
             </div>
           ))}
         </div>
+      ) : (
+        <>
+          {/* Featured + Related */}
+          <div className="flex md:flex-row flex-col gap-4">
+            {hasFeatured && (
+              <div>
+                <ArticleItem article={featured} variant="big" />
+              </div>
+            )}
+            {hasRelated && (
+              <div className="flex flex-col gap-4">
+                {related.slice(0, 3).map((article) => (
+                  <div key={article.id}>
+                    <ArticleItem article={article} variant="small" />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Other Articles (list layout) */}
+          {others.length > 0 && (
+            <div className="flex flex-col mt-5">
+              {others.slice(0, 3).map((article) => (
+                <div key={article.id}>
+                  <ArticleItem article={article} variant="list" />
+                </div>
+              ))}
+            </div>
+          )}
+        </>
       )}
     </TabWrapper>
-  )
+  );
 }
 
 
