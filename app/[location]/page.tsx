@@ -5,6 +5,7 @@ import { NewsFeed, SkeletonNewsFeed } from '@/components/news-feed';
 import { Button } from '@/components/ui/button';
 import WeatherWidget from '@/components/weather-widget';
 import { useFetch } from '@/hooks/useFetch';
+import { formatDateGR } from '@/lib/formatDateGR';
 import { Info } from 'lucide-react';
 import { FC, use } from 'react'
 
@@ -37,7 +38,7 @@ const page: FC<pageProps> = ({ params }) => {
                         Πως κατατάσσονται αυτές οι ειδήσεις;
                     </Button>
                     <h1 className="text-white text-[1.75rem] mb-2">Η ενημέρωσή σας</h1>
-                    <p className="text-gray-300 text-sm">Κυριακή 20 Ιουλίου</p>
+                    <p className="text-gray-300 text-sm">{formatDateGR()}</p>
                 </div>
                 <div>
                     <WeatherWidget />

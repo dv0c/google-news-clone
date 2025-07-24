@@ -2,6 +2,7 @@ import { Menu, Search, Settings, User, Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SearchBar } from "./search-bar"
 import { Navigation } from "./navigation"
+import Link from "next/link"
 
 interface HeaderProps {
   activeTab: string
@@ -19,9 +20,10 @@ export function Header({ activeTab }: HeaderProps) {
             </Button>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
-                <span className="text-white font-bold text-sm">F</span>
+                <span className="text-white font-bold text-sm">M</span>
               </div>
-              <h1 className="text-xl font-normal text-white">ForYou Ειδήσεις</h1>
+              <h1 className="text-xl font-normal text-white">Meindesk</h1>
+              <Link href="/" className="text-xl font-normal text-white hover:underline">Ειδήσεις</Link>
             </div>
           </div>
 
