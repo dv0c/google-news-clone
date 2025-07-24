@@ -22,7 +22,7 @@ export default function GoogleNewsClone() {
 
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/articles")
+    fetch(process.env.NEXT_PUBLIC_URL +"/api/articles")
       .then((response) => response.json())
       .then((data) => {
         setArticleData(data)
