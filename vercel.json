@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/rss/sync/schedule/route.ts": {
+      "schedule": "0 * * * *" 
+    }
+  }
+}
