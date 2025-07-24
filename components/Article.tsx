@@ -81,7 +81,7 @@ export function ArticleItem({ article, variant, isFirst }: ArticleItemProps) {
               alt="thumbnail"
             />
           </div>
-          <span className="text-gray-300 text-xs">{article.pubDate}</span>
+          <span className="text-gray-300 text-xs">{formatRelativeGR(article.pubDate as string)}</span>
         </article>
       )}
 
@@ -124,10 +124,10 @@ export function ArticleItem({ article, variant, isFirst }: ArticleItemProps) {
           <div className="flex items-center gap-2 pb-0">
             <img
               className="w-4 h-4 object-cover"
-              src={article.Website?.favicon || "https://cdn-icons-png.flaticon.com/512/124/124033.png"}
+              src={article.favicon || article.Website?.favicon || "https://cdn-icons-png.flaticon.com/512/124/124033.png"}
               alt="favicon"
             />
-            <span className="text-gray-400 text-xs">{article.Website?.name || "RSS Feed"}</span>
+            <span className="text-gray-400 text-xs">{article.websiteName || article.Website?.name || "RSS Feed"}</span>
           </div>
           <div className="flex justify-between gap-2">
             <div className="flex flex-col gap-2">
@@ -155,17 +155,17 @@ export function ArticleItem({ article, variant, isFirst }: ArticleItemProps) {
           <div className="flex items-center gap-2 pb-0">
             <img
               className="w-4 h-4 object-cover"
-              src={article.Website?.favicon || "https://cdn-icons-png.flaticon.com/512/124/124033.png"}
+              src={article.favicon || article.Website?.favicon || "https://cdn-icons-png.flaticon.com/512/124/124033.png"}
               alt="favicon"
             />
-            <span className="text-gray-400 text-xs">{article.Website?.name || "RSS Feed"}</span>
+            <span className="text-gray-400 text-xs">{article.websiteName || article.Website?.name || "RSS Feed"}</span>
           </div>
           <div className="flex justify-between gap-2">
             <div className="flex flex-col gap-2">
               <h2 className="mt-2 text-md line-clamp-3 md:line-clamp-3 max-w-lg h-[50px] text-white group-hover:underline">
                 {article.title}
               </h2>
-              <span className="text-gray-400 text-xs">{article.pubDate}</span>
+              <span className="text-gray-400 text-xs">{formatRelativeGR(article.pubDate as string)}</span>
             </div>
             <img
               className="h-[70px] w-[70px] object-cover rounded-xl"

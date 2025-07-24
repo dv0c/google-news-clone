@@ -1,8 +1,0 @@
-{
-  "functions": {
-    "api/rss/sync/route.ts": {
-      "runtime": "edge",          
-      "schedule": "@hourly"
-    }
-  }
-}
