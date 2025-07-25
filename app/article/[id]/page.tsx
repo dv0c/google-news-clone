@@ -39,6 +39,12 @@ const page: FC<pageProps> = async ({ params }) => {
 
             {/* Hero Section */}
             <div className="max-w-5xl mx-auto px-4 py-8">
+                <Link href="/" passHref>
+                    <Button variant="ghost" size={'sm'} className="bg-transparent mb-5 text-white border-white hover:bg-white hover:text-black">
+                        <ArrowLeft size={16} className="mr-2" />
+                        Επιστροφή στις ειδήσεις
+                    </Button>
+                </Link>
                 <div className="flex items-center gap-4 mb-2">
                     <img
                         src={data.favicon || 'https://cdn-icons-png.flaticon.com/512/124/124033.png'}
