@@ -12,7 +12,7 @@ interface ArticleItemProps {
 export function ArticleItem({ article, variant, isFirst }: ArticleItemProps) {
   
   return (
-    <Link href={article.link} target="_blank" className="group cursor-pointer">
+    <Link href={'/article/' + article.id} target="_blank" className="group cursor-pointer">
       {variant === "big" && (
         <article className="md:max-w-[280px] transition-all active:scale-[0.99]">
           <img

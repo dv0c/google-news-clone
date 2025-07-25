@@ -2,15 +2,54 @@ import { prisma as db } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { URL } from "url";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    // Count total articles
+    const { searchParams } = new URL(request.url);
+    const includeContent = searchParams.get("include") === "content";
+    const articleId = searchParams.get("id");
+
+    // Fetch single article with full content if query is provided
+    if (includeContent && articleId) {
+      const article = await db.article.findUnique({
+        where: { id: articleId },
+        select: {
+          Website: true,
+          categories: true,
+          createdAt: true,
+          creator: true,
+          dcCreator: true,
+          favicon: true,
+          guid: true,
+          id: true,
+          isoDate: true,
+          link: true,
+          pubDate: true,
+          thumbnail: true,
+          title: true,
+          updatedAt: true,
+          websiteId: true,
+          websiteName: true,
+          content: true,
+          contentEncoded: true,
+        },
+      });
+
+      if (!article) {
+        return NextResponse.json(
+          { error: "Article not found" },
+          { status: 404 }
+        );
+      }
+
+      return NextResponse.json({ article });
+    }
+
+    // Normal layout response
     const totalCount = await db.article.count();
     if (totalCount === 0) {
       return NextResponse.json({ error: "No articles found" }, { status: 404 });
     }
 
-    // Random Featured Article
     const featuredSkip = Math.floor(Math.random() * totalCount);
     const featured = await db.article.findFirst({
       skip: featuredSkip,
@@ -34,11 +73,11 @@ export async function GET() {
         websiteName: true,
       },
     });
+
     if (!featured) {
       return NextResponse.json({ error: "No articles found" }, { status: 404 });
     }
 
-    // Related Articles (by category, excluding featured)
     const relatedPool = await db.article.findMany({
       where: {
         id: { not: featured.id },
@@ -64,13 +103,10 @@ export async function GET() {
       },
       take: 10,
     });
-    const shuffledRelated = relatedPool.sort(() => 0.5 - Math.random());
-    const related = shuffledRelated.slice(0, 7);
+    const related = relatedPool.sort(() => 0.5 - Math.random()).slice(0, 7);
 
-    // IDs to exclude
     const excludeIds = [featured.id, ...related.map((a) => a.id)];
 
-    // Others (different website, excluding above)
     const othersPool = await db.article.findMany({
       where: {
         id: { notIn: excludeIds },
@@ -96,11 +132,9 @@ export async function GET() {
       },
       take: 10,
     });
-    const shuffledOthers = othersPool.sort(() => 0.5 - Math.random());
-    const others = shuffledOthers.slice(0, 10);
+    const others = othersPool.sort(() => 0.5 - Math.random()).slice(0, 10);
     excludeIds.push(...others.map((a) => a.id));
 
-    // You (completely random 3–5 articles, excluding all above)
     const youPool = await db.article.findMany({
       where: {
         id: { notIn: excludeIds },
@@ -125,8 +159,9 @@ export async function GET() {
       },
       take: 10,
     });
-    const shuffledYou = youPool.sort(() => 0.5 - Math.random());
-    const you = shuffledYou.slice(0, Math.floor(Math.random() * 3) + 3); // 3–5
+    const you = youPool
+      .sort(() => 0.5 - Math.random())
+      .slice(0, Math.floor(Math.random() * 3) + 3); // 3–5
 
     return NextResponse.json({
       featured,
