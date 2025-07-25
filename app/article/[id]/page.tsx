@@ -10,7 +10,7 @@ import { Article, Website } from '@prisma/client'
 import axios from 'axios'
 import { ArrowLeft, Globe } from 'lucide-react'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { FC } from 'react'
 
 interface pageProps {
@@ -23,6 +23,7 @@ const page: FC<pageProps> = async ({ params }) => {
     const { id } = await params
     if (!id) return notFound()
 
+
     const data = await axios
         .get(`${process.env.NEXT_PUBLIC_URL || ''}/api/articles?include=content&id=${id}`)
         .then((res) => res.data.article) as Article & {
@@ -31,6 +32,15 @@ const page: FC<pageProps> = async ({ params }) => {
 
     if (!data || !data.id) {
         return notFound()
+    }
+
+    // Redirect if content is too short
+    if (!data.content || data.content.length <= 200) {
+        if (data.link) {
+            return redirect(data.link)
+        } else {
+            return redirect('/')
+        }
     }
 
     return (
