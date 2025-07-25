@@ -189,7 +189,7 @@ export async function GET(req: NextRequest) {
         });
 
         if (exists) {
-          console.log(`Skipped existing article: ${item.title}`);
+          console.log(`[RSS] Skipped existing article: ${item.title}`);
         }
       }
     }
