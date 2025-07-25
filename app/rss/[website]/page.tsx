@@ -21,7 +21,7 @@ interface pageProps {
 const page: FC<pageProps> = async ({ params }) => {
     const { website } = await params
     if (!website) return notFound()
-    const { data } = await axios.get(`${process.env.API_BASE_URL || ''}/api/rss?websiteId=${website}`)
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_URL || ''}/api/rss?websiteId=${website}`)
 
 
     return <div className='min-h-screen bg-[#292a2d]'>

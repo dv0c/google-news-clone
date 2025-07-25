@@ -31,7 +31,6 @@ type CustomItem = {
 
 const parser: Parser<{}, CustomItem> = new Parser();
 
-// Favicon fetcher
 async function fetchFavicon(siteUrl: string): Promise<string | null> {
   try {
     const origin = new URL(siteUrl).origin;
@@ -54,7 +53,6 @@ async function fetchFavicon(siteUrl: string): Promise<string | null> {
   }
 }
 
-// OG image fetcher
 async function fetchOgImage(url: string): Promise<string | null> {
   try {
     const res = await fetch(url);
@@ -68,7 +66,6 @@ async function fetchOgImage(url: string): Promise<string | null> {
   }
 }
 
-// Create article with deduplication
 async function createArticle(data: {
   title: string;
   content: string;
@@ -86,12 +83,29 @@ async function createArticle(data: {
   contentEncoded?: string;
   websiteId?: string | null;
 }) {
-  const existingArticle = await prisma.article.findFirst({
-    where: {
+  const orConditions = [];
+
+  if (data.guid) {
+    orConditions.push({ guid: data.guid });
+  }
+
+  if (data.link) {
+    orConditions.push({ link: data.link });
+  }
+
+  if (data.title && data.pubDate) {
+    orConditions.push({
       title: {
         equals: data.title,
         mode: "insensitive",
       },
+      pubDate: data.pubDate,
+    });
+  }
+
+  const existingArticle = await prisma.article.findFirst({
+    where: {
+      OR: orConditions,
     },
   });
 
@@ -122,7 +136,6 @@ async function createArticle(data: {
   return { exists: false, article };
 }
 
-// Main GET route
 export async function GET() {
   try {
     const allWebsites = await prisma.website.findMany({
@@ -179,7 +192,7 @@ export async function GET() {
         });
 
         if (exists) {
-          console.log(`Article exists, skipping: ${item.title}`);
+          console.log(`Skipped existing article: ${item.title}`);
         }
       }
     }
