@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import Parser from "rss-parser";
 import { prisma } from "@/lib/prisma";
 
@@ -13,6 +13,8 @@ const FEEDS = [
   "https://www.ilialive.gr/newsfeed?format=feed",
   "https://www.autoblog.gr/feed/",
 ];
+
+const ACCESS_KEY = "90b5327d-86b0-41fe-adee-0699e4062f36";
 
 type CustomItem = {
   creator?: string;
@@ -85,28 +87,17 @@ async function createArticle(data: {
 }) {
   const orConditions = [];
 
-  if (data.guid) {
-    orConditions.push({ guid: data.guid });
-  }
-
-  if (data.link) {
-    orConditions.push({ link: data.link });
-  }
-
+  if (data.guid) orConditions.push({ guid: data.guid });
+  if (data.link) orConditions.push({ link: data.link });
   if (data.title && data.pubDate) {
     orConditions.push({
-      title: {
-        equals: data.title,
-        mode: "insensitive",
-      },
+      title: { equals: data.title, mode: "insensitive" },
       pubDate: data.pubDate,
     });
   }
 
   const existingArticle = await prisma.article.findFirst({
-    where: {
-      OR: orConditions,
-    },
+    where: { OR: orConditions },
   });
 
   if (existingArticle) {
@@ -136,7 +127,13 @@ async function createArticle(data: {
   return { exists: false, article };
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const key = req.nextUrl.searchParams.get("key");
+
+  if (key !== ACCESS_KEY) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const allWebsites = await prisma.website.findMany({
       select: { id: true, url: true, name: true, favicon: true },
