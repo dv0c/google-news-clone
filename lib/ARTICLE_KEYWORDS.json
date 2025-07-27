@@ -1,0 +1,42 @@
+{
+  "technology": [
+    "tech", "technology", "ai", "artificial intelligence", "robotics", "gadgets", "smartphone", "mobile", "apps", "software", "hardware", "internet", "cloud",
+    "τεχνολογία", "τεχνολογια", "κινητά", "κινητο", "υπολογιστές", "ρομποτική", "ρομποτικη", "τεχνητή νοημοσύνη", "έξυπνες συσκευές", "ιντερνετ", "λογισμικό", "υλικό"
+  ],
+  "gaming": [
+    "gaming", "game", "video game", "esports", "playstation", "xbox", "nintendo", "pc gaming", "fps", "rpg", "mmo",
+    "παιχνίδι", "παιχνιδια", "βιντεοπαιχνίδια", "γκέιμινγκ", "πλεϊστέισον", "εσπορτς", "νιντέντο", "υπολογιστή", "fps", "rpg", "mmo"
+  ],
+  "politics": [
+    "politics", "election", "government", "parliament", "minister", "democracy", "policy", "law", "senate",
+    "πολιτική", "εκλογές", "κυβέρνηση", "βουλή", "πρωθυπουργός", "υπουργός", "δημοκρατία", "νόμος", "πολιτευτής"
+  ],
+  "sports": [
+    "football", "soccer", "basketball", "nba", "euroleague", "tennis", "olympics", "fifa", "uefa", "match", "athlete", "goal", "score",
+    "αθλητισμός", "ποδόσφαιρο", "μπάσκετ", "μπάσκετμπολ", "νβα", "ευρωλίγκα", "τενις", "ολυμπιακοί", "αθλητής", "σκορ", "τέρμα", "ματς"
+  ],
+  "entertainment": [
+    "entertainment", "celebrity", "movie", "tv", "series", "netflix", "cinema", "actor", "singer", "hollywood", "trailer",
+    "διασκέδαση", "τηλεόραση", "σειρά", "κινηματογράφος", "ταινία", "τραγουδιστής", "ηθοποιός", "σελέμπριτι", "νετφλιξ", "τρεϊλερ"
+  ],
+  "health": [
+    "health", "medicine", "hospital", "doctor", "covid", "vaccine", "mental health", "fitness", "wellness", "diet",
+    "υγεία", "ιατρική", "νοσοκομείο", "γιατρός", "κορονοϊός", "εμβόλιο", "ψυχική υγεία", "διατροφή", "δίαιτα", "άσκηση", "φάρμακο"
+  ],
+  "travel": [
+    "travel", "tourism", "trip", "flight", "hotel", "destination", "explore", "beach", "adventure",
+    "ταξίδι", "τουρισμός", "εκδρομή", "πτήση", "ξενοδοχείο", "προορισμός", "παραλία", "περιπέτεια", "διακοπές"
+  ],
+  "finance": [
+    "finance", "economy", "market", "stock", "investment", "bank", "crypto", "bitcoin", "inflation", "recession",
+    "οικονομία", "χρηματιστήριο", "επένδυση", "τράπεζα", "κρυπτονομίσματα", "κατάρρευση", "πληθωρισμός", "ύφεση", "μετοχές"
+  ],
+  "science": [
+    "science", "research", "experiment", "physics", "biology", "chemistry", "scientist", "nasa", "space", "discovery",
+    "επιστήμη", "έρευνα", "πείραμα", "φυσική", "βιολογία", "χημεία", "αστρονομία", "ανακάλυψη", "διάστημα", "επιστήμονας"
+  ],
+  "automotive": [
+    "car", "cars", "automobile", "electric vehicle", "tesla", "engine", "driving", "ev", "vehicle",
+    "αυτοκίνητο", "οδήγηση", "ηλεκτρικό αυτοκίνητο", "κινητήρας", "όχημα", "τροχοί", "τεσλα"
+  ]
+}

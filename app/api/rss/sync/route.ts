@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Parser from "rss-parser";
 import { prisma } from "@/lib/prisma";
+import ARTICLE_KEYWORDS from '@/lib/ARTICLE_KEYWORDS.json'
 
 const FEEDS = [
   "https://www.newsit.gr/feed",
@@ -32,6 +33,24 @@ type CustomItem = {
 };
 
 const parser: Parser<{}, CustomItem> = new Parser();
+
+function getMatchingCategories(text: string): string[] {
+  if (!text) return [];
+
+  const lowerText = text.toLowerCase();
+  const matched: Set<string> = new Set();
+
+  for (const [category, keywords] of Object.entries(ARTICLE_KEYWORDS)) {
+    for (const keyword of keywords) {
+      if (lowerText.includes(keyword.toLowerCase())) {
+        matched.add(category);
+        break;
+      }
+    }
+  }
+
+  return Array.from(matched);
+}
 
 async function fetchFavicon(siteUrl: string): Promise<string | null> {
   try {
@@ -142,55 +161,63 @@ export async function GET(req: NextRequest) {
     const websiteMap = new Map(allWebsites.map((w) => [w.url, w]));
 
     for (const feedUrl of FEEDS) {
-      const feed = await parser.parseURL(feedUrl);
-      const siteOrigin = new URL(feed.link || feedUrl).origin;
+      try {
+        const feed = await parser.parseURL(feedUrl);
+        const siteOrigin = new URL(feed.link || feedUrl).origin;
 
-      let website = websiteMap.get(siteOrigin);
+        let website = websiteMap.get(siteOrigin);
 
-      if (!website) {
-        const favicon = await fetchFavicon(siteOrigin);
-        website = await prisma.website.create({
-          data: {
-            url: siteOrigin,
-            name: feed.title || siteOrigin,
-            favicon: favicon,
-          },
-        });
-        websiteMap.set(siteOrigin, website);
-      }
+        if (!website) {
+          const favicon = await fetchFavicon(siteOrigin);
+          const categories = getMatchingCategories(feed.title || siteOrigin);
 
-      for (const item of feed.items) {
-        if (!item.title) continue;
+          website = await prisma.website.create({
+            data: {
+              url: siteOrigin,
+              name: feed.title || siteOrigin,
+              favicon: favicon,
+              category: categories,
+            },
+          });
 
-        const thumbnail =
-          item.thumbnail ||
-          (item.link ? await fetchOgImage(item.link) : null) ||
-          null;
-
-        const guidValue =
-          typeof item.guid === "string" ? item.guid : item.guid?._ || null;
-
-        const { exists } = await createArticle({
-          title: item.title,
-          content: item.content || "",
-          contentSnippet: item.contentSnippet || "",
-          creator: item.creator || "RSS Feed",
-          pubDate: item.pubDate || null,
-          dcCreator: item.dcCreator || null,
-          link: item.link || null,
-          guid: guidValue,
-          isoDate: item.isoDate || null,
-          favicon: website.favicon || null,
-          websiteName: website.name || null,
-          thumbnail,
-          categories: item.categories || [],
-          contentEncoded: item["content:encoded"] || "",
-          websiteId: website.id,
-        });
-
-        if (exists) {
-          console.log(`[RSS] Skipped existing article: ${item.title}`);
+          websiteMap.set(siteOrigin, website);
         }
+
+        for (const item of feed.items) {
+          if (!item.title) continue;
+
+          const thumbnail =
+            item.thumbnail ||
+            (item.link ? await fetchOgImage(item.link) : null) ||
+            null;
+
+          const guidValue =
+            typeof item.guid === "string" ? item.guid : item.guid?._ || null;
+
+          const { exists } = await createArticle({
+            title: item.title,
+            content: item.content || "",
+            contentSnippet: item.contentSnippet || "",
+            creator: item.creator || "RSS Feed",
+            pubDate: item.pubDate || null,
+            dcCreator: item.dcCreator || null,
+            link: item.link || null,
+            guid: guidValue,
+            isoDate: item.isoDate || null,
+            favicon: website.favicon || null,
+            websiteName: website.name || null,
+            thumbnail,
+            categories: item.categories || [],
+            contentEncoded: item["content:encoded"] || "",
+            websiteId: website.id,
+          });
+
+          if (exists) {
+            console.log(`[RSS] Skipped existing article: ${item.title}`);
+          }
+        }
+      } catch (err) {
+        console.error(`[RSS] Failed to parse or handle feed: ${feedUrl}`, err);
       }
     }
 

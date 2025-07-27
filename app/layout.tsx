@@ -6,8 +6,8 @@ import { GoogleSignInPopup } from '@/components/GoogleSignInPopup'
 import SessionProvider from '@/components/providers/SessionProvider'
 
 export const metadata: Metadata = {
-  title: 'Google News Clone',
-  description: 'Created with NextJS',
+  title: 'News Meindesk',
+  description: 'Created with NextJS Inspired by Google News',
 }
 
 const openSans = Open_Sans({
