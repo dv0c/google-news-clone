@@ -34,7 +34,7 @@ model Article {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Website   Website? @relation(fields: [websiteId], references: [id])
+  Website   Website? @relation(fields: [websiteId], references: [id], onDelete: Cascade)
   websiteId String?  @db.ObjectId
 }
 
