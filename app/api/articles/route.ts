@@ -50,10 +50,9 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "No articles found" }, { status: 404 });
     }
 
-    const featuredSkip = Math.floor(Math.random() * totalCount);
+    // Featured article ordered by createdAt
     const featured = await db.article.findFirst({
-      skip: featuredSkip,
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: "desc" }, // order by createdAt
       select: {
         Website: true,
         categories: true,
@@ -78,11 +77,13 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "No articles found" }, { status: 404 });
     }
 
+    // Related articles ordered by createdAt
     const relatedPool = await db.article.findMany({
       where: {
         id: { not: featured.id },
         categories: { hasSome: featured.categories },
       },
+      orderBy: { createdAt: "desc" }, // order by createdAt
       select: {
         Website: true,
         categories: true,
@@ -107,6 +108,7 @@ export async function GET(request: Request) {
 
     const excludeIds = [featured.id, ...related.map((a) => a.id)];
 
+    // Others (keep random pool without order change)
     const othersPool = await db.article.findMany({
       where: {
         id: { notIn: excludeIds },
@@ -135,6 +137,7 @@ export async function GET(request: Request) {
     const others = othersPool.sort(() => 0.5 - Math.random()).slice(0, 10);
     excludeIds.push(...others.map((a) => a.id));
 
+    // You (keep random pool without order change)
     const youPool = await db.article.findMany({
       where: {
         id: { notIn: excludeIds },

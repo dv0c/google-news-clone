@@ -2,18 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import Parser from "rss-parser";
 import { prisma } from "@/lib/prisma";
 import ARTICLE_KEYWORDS from '@/lib/ARTICLE_KEYWORDS.json'
+import RSS_FEEDS from "@/lib/RSS_FEEDS.json";
 
-const FEEDS = [
-  "https://www.newsit.gr/feed",
-  "https://feeds.feedburner.com/dikaiologitika/ZteV",
-  "https://unboxholics.com/news?format=rss",
-  "https://www.protothema.gr/rss",
-  "https://www.naftemporiki.gr/feed/",
-  "https://ilia.news/feed/",
-  "https://www.in.gr/feed",
-  "https://www.ilialive.gr/newsfeed?format=feed",
-  "https://www.autoblog.gr/feed/",
-];
+const FEEDS = RSS_FEEDS.feeds
 
 const ACCESS_KEY = "90b5327d-86b0-41fe-adee-0699e4062f36";
 

@@ -43,10 +43,10 @@ export function ArticleItem({ article, variant, isFirst }: ArticleItemProps) {
             <div className="flex items-center gap-2">
               <img
                 className="w-4 h-4 object-cover"
-                src={article.Website?.favicon || ""}
+                src={article.favicon || null}
                 alt="favicon"
               />
-              <span className="text-gray-400 text-xs">{article.Website?.name}</span>
+              <span className="text-gray-400 text-xs">{article.websiteName}</span>
             </div>
             <h2 className="text-[.875rem] line-clamp-4 text-[#c4c7c5] group-hover:underline">
               {article.title}
@@ -66,10 +66,10 @@ export function ArticleItem({ article, variant, isFirst }: ArticleItemProps) {
           <div className="flex items-center gap-2">
             <img
               className="w-4 h-4 object-cover"
-              src={article.Website?.favicon || ""}
+              src={article.favicon || null}
               alt="favicon"
             />
-            <span className="text-gray-400 text-xs">{article.Website?.name}</span>
+            <span className="text-gray-400 text-xs">{article.websiteName}</span>
           </div>
           <div className="flex justify-between ">
             <h2 className="mt-2 text-xs md:text-[1.15rem] leading-6 md:line-clamp-3 max-w-lg text-white group-hover:underline">
