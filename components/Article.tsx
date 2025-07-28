@@ -1,10 +1,12 @@
-import { Article } from "@prisma/client"
+import { Article, Website } from "@prisma/client"
 import Link from "next/link"
 import clsx from "clsx"
 import { formatRelativeGR } from "@/lib/formatRelativeGR"
 
 interface ArticleItemProps {
-  article: Article
+  article: Article & {
+    Website: Website
+  }
   variant: "big" | "small" | "list" | "list2" | "tab" | "list_bigger_thumbnail"
   isFirst?: boolean
 }

@@ -1,7 +1,9 @@
 "use client";
 
-import { MapPin, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
+import { ChevronLeft, MapPin, Sun } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 type WeatherData = {
   temp: number;
@@ -28,7 +30,8 @@ export default function WeatherWidget() {
             `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&lang=el&appid=${API_KEY}`
           );
           const data = await res.json();
-
+          console.log("Weather data:", data);
+          
           setWeather({
             temp: Math.round(data.main.temp),
             city: data.name,
