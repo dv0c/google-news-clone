@@ -1,49 +1,98 @@
-"use client"
+"use client";
 
-import { ChevronLeft, MapPin, Sun } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { MapPin, Sun } from "lucide-react";
+import { useEffect, useState } from "react";
+
+type WeatherData = {
+  temp: number;
+  city: string;
+  icon: string;
+};
 
 export default function WeatherWidget() {
+  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Replace with your OpenWeather API key
+  const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_KEY;
+
+  useEffect(() => {
+    async function fetchWeather() {
+      try {
+        // Get user location (geolocation API)
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+          const { latitude, longitude } = pos.coords;
+
+          // Fetch weather from OpenWeather
+          const res = await fetch(
+            `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&lang=el&appid=${API_KEY}`
+          );
+          const data = await res.json();
+
+          setWeather({
+            temp: Math.round(data.main.temp),
+            city: data.name,
+            icon: data.weather[0].icon,
+          });
+          setLoading(false);
+        });
+      } catch (err) {
+        console.error("Weather fetch error", err);
+        setLoading(false);
+      }
+    }
+
+    fetchWeather();
+  }, [API_KEY]);
+
   return (
     <div>
       <div className="relative flex items-center rounded-2xl bg-[#1f1f1f] gap-4 max-w-2xl">
-        {/* Notification Card */}
-        {/* <Card className="bg-white px-5 py-2 rounded-2xl shadow-lg max-w-xs relative">
-          <div className="space-y-2">
-            <h3 className="text-red-600 font-medium text-sm leading-tight">Ειδοποίηση για μέτρια υψηλή ...</h3>
-            <p className="text-gray-700 text-xs leading-relaxed">
-              Υψηλές τιμές της θερμοκρασίας με τιμές που αναμένεται να κυμαίνονται...
-            </p>
-          </div>
-        </Card> */}
-
         {/* Weather Display */}
-        <div className="relative flex gap-2 items-center bg-[#1f1f1f] rounded-2xl px-5 py-2 text-white">
+        <div className="relative flex gap-2 items-center bg-[#1f1f1f] rounded-2xl px-5 py-2 text-white w-full">
           <div className="relative">
-            <Sun style={{
-              animation: "spin 10s linear infinite",
-            }} className="h-12 w-12  text-yellow-400 fill-yellow-400" />
+            {weather ? (
+              <img
+                src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
+                alt="weather icon"
+                className="h-12 w-12"
+              />
+            ) : (
+              <Sun
+                style={{ animation: "spin 10s linear infinite" }}
+                className="h-12 w-12 text-yellow-400 fill-yellow-400"
+              />
+            )}
           </div>
           <div className="flex flex-col">
-            {/* Location with notification dot */}
+            {/* Location */}
             <div className="flex items-center gap-2 justify-center">
-              <span className="text-xs text-gray-300">Ο καιρός στην τοποθεσία σας</span>
+              <span className="text-xs text-gray-300">
+                Ο καιρός στην τοποθεσία σας
+              </span>
               <MapPin className="h-4 w-4 text-gray-300" />
             </div>
 
-            {/* Weather Icon and Temperature */}
+            {/* Temperature */}
             <div className="flex items-center gap-4">
-              <div className="text-2xl font-semibold">26°C</div>
+              <div className="text-2xl font-semibold">
+                {loading
+                  ? "..."
+                  : weather
+                  ? `${weather.temp}°C`
+                  : "Δεν βρέθηκαν δεδομένα"}
+              </div>
             </div>
 
-            {/* Attribution */}
+            {/* City Name */}
             <div>
-              <span className="text-blue-400 text-xs">καιρός Google</span>
+              <span className="text-blue-400 text-xs">
+                {weather?.city ?? "καιρός Google"}
+              </span>
             </div>
+          </div>
         </div>
       </div>
     </div>
-    </div >
-  )
+  );
 }
