@@ -35,7 +35,7 @@ export function NewsFeed({ featured, related = [], others = [] }: NewsFeedProps)
               </div>
             )}
             {hasRelated && (
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
                 {related.slice(0, 3).map((article) => (
                   <div key={article.id}>
                     <ArticleItem article={article} variant="small" />
