@@ -8,7 +8,7 @@ import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 
 const Sources = () => {
-    const { websites, isLoading } = useFetch({ mode: 'websites', limit: 3, page: 1 })
+    const { websites, isLoading } = useFetch({ mode: 'websites', limit: 5, page: 1 })
 
     if (isLoading) {
         return <div>
