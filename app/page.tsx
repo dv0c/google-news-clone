@@ -41,7 +41,7 @@ export default function GoogleNewsClone() {
 
 
   return (
-    <div className="min-h-screen mt-[60px] bg-[#292a2d]">
+    <div className="min-h-screen mt-[70px] md:mt-[60px] bg-[#292a2d]">
       <BreakingNewsBanner />
       <Heading />
       <div className="mb-6 max-w-[1140px] flex-wrap gap-5 px-4 sm:px-2 lg:px-0 py-6 mx-auto flex items-center justify-between">

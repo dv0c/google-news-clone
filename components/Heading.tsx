@@ -39,7 +39,7 @@ const Heading = () => {
     const article = featured;
 
     return (
-        <div className="relative w-full z-1 h-[70vh] pb-10 overflow-hidden">
+        <div className="relative w-full z-1 h-full md:h-[70vh] pb-10 overflow-hidden">
             {/* Background image */}
             <Image
                 src={article.thumbnail || ""}
@@ -110,7 +110,7 @@ const Heading = () => {
 export default Heading;
 
 const LoadingSkeleton = () => (
-  <div className="relative w-full h-[70vh] pb-10 overflow-hidden bg-gray-800 animate-pulse">
+  <div className="relative w-full h-full md:h-[70vh] pb-10 overflow-hidden bg-gray-800 animate-pulse">
     {/* Background gray block */}
     <div className="absolute inset-0 bg-gray-700" />
 
