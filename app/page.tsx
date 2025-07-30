@@ -107,25 +107,23 @@ export default function GoogleNewsClone() {
             <Sources />
           </div>
         </div>
-        <div className="mt-6">
-          <SwiperSlider>
-            <ArticlesByCategory title="Σπορτς" subtitle="" categories={[
-              "Ποδόσφαιρο",
-              "Σπορ",
-              "νόριτς",
-              "ολυμπιακός",
-              "ποδόσφαιρο",
-              "φιλικό"
-            ]} />
-            <ArticlesByCategory title="Πολιτικη - Νεα" subtitle="" categories={[
-              "Πολιτική",
-              "ΓΙΩΡΓΟΣ ΦΛΩΡΙΔΗΣ",
-              "ΔΗΜΗΤΡΗΣ ΚΟΥΤΣΟΥΜΠΑΣ",
-              "ΙΣΡΑΗΛ",
-              "ΚΚΕ",
-              "ΠΑΛΑΙΣΤΙΝΗ"
-            ]} />
-          </SwiperSlider>
+        <div className="space-y-6">
+          <ArticlesByCategory title="Σπορτς" subtitle="" categories={[
+            "Ποδόσφαιρο",
+            "Σπορ",
+            "νόριτς",
+            "ολυμπιακός",
+            "ποδόσφαιρο",
+            "φιλικό"
+          ]} />
+          <ArticlesByCategory title="Πολιτικη - Νεα" subtitle="" categories={[
+            "Πολιτική",
+            "ΓΙΩΡΓΟΣ ΦΛΩΡΙΔΗΣ",
+            "ΔΗΜΗΤΡΗΣ ΚΟΥΤΣΟΥΜΠΑΣ",
+            "ΙΣΡΑΗΛ",
+            "ΚΚΕ",
+            "ΠΑΛΑΙΣΤΙΝΗ"
+          ]} />
         </div>
       </main>
 
