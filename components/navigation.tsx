@@ -1,14 +1,16 @@
-"use client"
+"use client";
 
-import Link from "next/link"
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 interface NavigationProps {
-  activeTab: string
+  activeTab: string;
+  className?: string;
 }
 
-export function Navigation({ activeTab }: NavigationProps) {
+export function Navigation({ activeTab, className }: NavigationProps) {
   const navigationItems = [
-    { id: "/", label: "Home" },
+    { id: "", label: "Home" },
     { id: "following", label: "Following" },
     { id: "showcase", label: "Showcase" },
     { id: "greece", label: "Greece" },
@@ -18,23 +20,36 @@ export function Navigation({ activeTab }: NavigationProps) {
     { id: "tech", label: "Tech" },
     { id: "entertainment", label: "Entertainment" },
     { id: "sports", label: "Sports" },
-  ]
+  ];
 
   return (
-    <div className=" border-gray-700">
-      <nav className="flex justify-center space-x-8 overflow-x-auto py-3">
-        {navigationItems.map((item) => (
-          <Link href={'/' + item.id} key={item.id}
-            className={`whitespace-nowrap text-sm font-medium transition-colors ${
-              activeTab === item.id
-                ? "text-blue-400 border-b-2 border-blue-400"
-                : "text-[#CCCCCC] hover:text-white"
-            }`}
-          >
-            {item.label}
-          </Link>
-        ))}
-      </nav>
-    </div>
-  )
+    <nav
+      className={cn("border-gray-700  whitespace-nowrap", className)}
+      aria-label="Primary"
+      tabIndex={0}
+    >
+      <div className="flex justify-center space-x-8 py-3 min-w-max">
+        {navigationItems.map((item) => {
+          const isActive = activeTab === item.id;
+          const href = item.id === "" ? "/" : `/${item.id}`;
+
+          return (
+            <Link
+              href={href}
+              key={item.id}
+              scroll={false}
+              aria-current={isActive ? "page" : undefined}
+              className={`text-sm font-medium transition-colors ${
+                isActive
+                  ? "text-blue-400 border-b-2 border-blue-400"
+                  : "text-[#CCCCCC] hover:text-white"
+              }`}
+            >
+              {item.label}
+            </Link>
+          );
+        })}
+      </div>
+    </nav>
+  );
 }

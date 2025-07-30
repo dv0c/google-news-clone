@@ -1,4 +1,3 @@
-import { ArticleItem } from '@/components/Article'
 import { ArticleContent } from '@/components/ArticleContent'
 import Footer from '@/components/Footer'
 import { Header } from '@/components/header'
@@ -6,102 +5,100 @@ import TabWrapper from '@/components/TabWrapper'
 import { Button } from '@/components/ui/button'
 import WeatherWidget from '@/components/weather-widget'
 import { formatDateGR } from '@/lib/formatDateGR'
-import { Article, Website } from '@prisma/client'
-import axios from 'axios'
+import { prisma } from '@/lib/prisma'
 import { ArrowLeft, Globe } from 'lucide-react'
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
-import { FC } from 'react'
+import RelatedArticles from './_comps/related-articles'
 
-interface pageProps {
-    params: {
-        id: string
-    }
+interface PageProps {
+  params: { id: string }
 }
 
-const page: FC<pageProps> = async ({ params }) => {
-    const { id } = await params
-    if (!id) return notFound()
+const Page = async ({ params }: PageProps) => {
+  const { id } = await params
 
+  // Fetch main article server-side
+  const article = await prisma.article.findUnique({
+    where: { id },
+    include: { Website: true },
+  })
 
-    const data = await axios
-        .get(`${process.env.NEXT_PUBLIC_URL || ''}/api/articles?include=content&id=${id}`)
-        .then((res) => res.data.article) as Article & {
-            Website: Website
-        }
+  if (!article) return notFound()
 
-    if (!data || !data.id) {
-        return notFound()
-    }
+  if (!article.content || article.content.length <= 200) {
+    return redirect(article.link || '/')
+  }
 
-    // Redirect if content is too short
-    if (!data.content || data.content.length <= 200) {
-        if (data.link) {
-            return redirect(data.link)
-        } else {
-            return redirect('/')
-        }
-    }
+  return (
+    <div className="min-h-screen bg-[#1e1f23] text-white">
+      <Header activeTab="" />
 
-    return (
-        <div className="min-h-screen bg-[#1e1f23] text-white relative">
-            <Header activeTab="" />
+      {/* HERO IMAGE */}
+      <div className="relative w-full h-[50vh] md:h-[60vh] overflow-hidden">
+        <img
+          src={article.thumbnail || '/placeholder.jpg'}
+          alt={article.title}
+          className="w-full h-full object-cover brightness-75"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
 
-            {/* Hero Section */}
-            <div className="max-w-5xl mx-auto px-4 py-8">
-                <Link href="/" passHref>
-                    <Button variant="ghost" size={'sm'} className="bg-transparent mb-5 text-white border-white hover:bg-white hover:text-black">
-                        <ArrowLeft size={16} className="mr-2" />
-                        Επιστροφή στις ειδήσεις
-                    </Button>
-                </Link>
-                <div className="flex items-center gap-4 mb-2">
-                    <img
-                        src={data.favicon || 'https://cdn-icons-png.flaticon.com/512/124/124033.png'}
-                        alt="Website"
-                        className="h-10 w-10 rounded-md object-contain bg-white p-1"
-                    />
-                    <div>
-                        <Link
-                            href={data.link || '#'}
-                            target="_blank"
-                            className="text-lg font-semibold hover:underline"
-                        >
-                            {data.Website?.name || data.websiteName || 'Άγνωστο'}
-                        </Link>
-                        <div className="text-sm text-gray-400">
-                            {formatDateGR(data.createdAt || data.pubDate)}
-                        </div>
-                    </div>
-                </div>
-
-                <h1 className="text-3xl font-bold mb-4 leading-tight">{data.title}</h1>
-            </div>
-
-            {/* Content */}
-            <main className="max-w-3xl mx-auto px-4 mb-10">
-                <ArticleContent html={data.content} />
-
-                {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row items-center justify-between mt-10 gap-4">
-                    <Link href="/" passHref>
-                        <Button variant="outlined" size={'sm'} className="bg-transparent text-white border-white hover:bg-white hover:text-black">
-                            <ArrowLeft size={16} className="mr-2" />
-                            Επιστροφή στις ειδήσεις
-                        </Button>
-                    </Link>
-                    <Link href={data.link || '#'} size={'sm'} target="_blank" passHref>
-                        <Button variant={'ghost'} className="bg-blue-600 hover:bg-blue-700 text-white">
-                            <Globe size={16} className="mr-2" />
-                            Επίσκεψη στην Ιστοσελίδα {data.Website?.name || data.websiteName || null}
-                        </Button>
-                    </Link>
-                </div>
-            </main>
-
-            <Footer />
+        {/* Title */}
+        <div className="absolute bottom-6 md:bottom-12 left-6 md:left-12 max-w-4xl">
+          <span className="uppercase text-red-500 font-bold text-sm">
+            {article.categories?.[0] || 'Ειδήσεις'}
+          </span>
+          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-3">
+            {article.title}
+          </h1>
+          <div className="text-sm text-gray-300">
+            Δημοσιεύτηκε {formatDateGR(article.createdAt || article.pubDate)}
+          </div>
         </div>
-    )
+      </div>
+
+      {/* MAIN */}
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* LEFT */}
+        <main className="lg:col-span-2">
+          <ArticleContent html={article.content} />
+
+          <div className="flex flex-col sm:flex-row items-center justify-between mt-10 gap-4">
+            <Link href="/" passHref>
+              <Button
+                variant="outlined"
+                size={'sm'}
+                className="bg-transparent text-white border-white hover:bg-white hover:text-black"
+              >
+                <ArrowLeft size={16} className="mr-2" />
+                Επιστροφή στις ειδήσεις
+              </Button>
+            </Link>
+            <Link href={article.link || '#'} target="_blank" passHref>
+              <Button
+                variant={'ghost'}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                <Globe size={16} className="mr-2" />
+                Επίσκεψη στην Ιστοσελίδα{' '}
+                {article.Website?.name || article.websiteName || null}
+              </Button>
+            </Link>
+          </div>
+        </main>
+
+        {/* RIGHT SIDEBAR */}
+        <aside className="space-y-6">
+          <WeatherWidget />
+          <TabWrapper title="Σχετικά Άρθρα">
+            <RelatedArticles articleId={id} />
+          </TabWrapper>
+        </aside>
+      </div>
+
+      <Footer />
+    </div>
+  )
 }
 
-export default page
+export default Page

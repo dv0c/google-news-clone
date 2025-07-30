@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Open_Sans } from 'next/font/google'
+import { Open_Sans, Geologica } from 'next/font/google'
 import './globals.css'
 import { AuthPopup } from '@/components/AuthPopup'
 import { GoogleSignInPopup } from '@/components/GoogleSignInPopup'
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: 'Created with NextJS Inspired by Google News',
 }
 
-const openSans = Open_Sans({
+const openSans = Geologica({
   subsets: ['latin'],
   variable: '--font-open-sans',
 })

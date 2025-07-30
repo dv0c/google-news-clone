@@ -39,7 +39,7 @@ const Heading = () => {
     const article = featured;
 
     return (
-        <div className="relative w-full h-[70vh] pb-10 overflow-hidden">
+        <div className="relative w-full z-1 h-[70vh] pb-10 overflow-hidden">
             {/* Background image */}
             <Image
                 src={article.thumbnail || ""}
@@ -83,7 +83,7 @@ const Heading = () => {
 
                 {/* Main headline */}
                 <Link href={'/article/' + article.id} target="_blank" className="max-w-3xl">
-                    <h1 className="text-3xl md:text-4xl hover:underline font-bold leading-snug mb-4">
+                    <h1 className="text-3xl md:text-4xl hover:underline font-extrabold leading-snug mb-4">
                         {article.title}
                     </h1>
 

@@ -51,7 +51,7 @@ export function BreakingNewsBanner() {
 
   return (
     <div className="sm:absolute z-10 w-full">
-      <div className="w-[95%] sm:max-w-fit max-w-fit mx-auto my-3 bg-red-600 text-white px-3 sm:px-4 py-2 rounded-md flex items-center gap-2 sm:gap-3">
+      <div className="w-[95%] sm:max-w-fit z-10 max-w-fit mx-auto my-3 bg-red-600 text-white px-3 sm:px-4 py-2 rounded-md flex items-center gap-2 sm:gap-3">
         {/* Pulsing dot */}
         <div className="w-3 h-3 rounded-full bg-white animate-pulse"></div>
 
