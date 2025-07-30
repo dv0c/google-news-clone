@@ -1,6 +1,5 @@
 import { ArticleContent } from '@/components/ArticleContent'
 import Footer from '@/components/Footer'
-import { Header } from '@/components/header'
 import TabWrapper from '@/components/TabWrapper'
 import { Button } from '@/components/ui/button'
 import WeatherWidget from '@/components/weather-widget'
@@ -31,8 +30,7 @@ const Page = async ({ params }: PageProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-[#292a2d] text-white">
-      <Header activeTab="" />
+    <div className="min-h-screen mt-[60px] bg-[#292a2d] text-white">
 
       {/* HERO IMAGE */}
       <div className="relative w-full h-[50vh] md:h-[60vh] overflow-hidden">

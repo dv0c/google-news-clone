@@ -28,8 +28,7 @@ const page: FC<pageProps> = ({ params }) => {
 
 
     return (
-        <div className='min-h-screen bg-[#292a2d]'>
-            <Header activeTab={location.location} />
+        <div className='min-h-screen mt-[60px] bg-[#292a2d]'>
 
             <div className="mb-6 max-w-6xl flex-wrap gap-5 px-4 sm:px-6 lg:px-8 py-6 mx-auto flex items-center justify-between">
                 <div>
