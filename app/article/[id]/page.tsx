@@ -31,7 +31,7 @@ const Page = async ({ params }: PageProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-[#1e1f23] text-white">
+    <div className="min-h-screen bg-[#292a2d] text-white">
       <Header activeTab="" />
 
       {/* HERO IMAGE */}
@@ -90,7 +90,7 @@ const Page = async ({ params }: PageProps) => {
         {/* RIGHT SIDEBAR */}
         <aside className="space-y-6">
           <WeatherWidget />
-          <TabWrapper title="Σχετικά Άρθρα">
+          <TabWrapper title="Σχετικά Άρθρα" border={false} className="mb-4">
             <RelatedArticles articleId={id} />
           </TabWrapper>
         </aside>

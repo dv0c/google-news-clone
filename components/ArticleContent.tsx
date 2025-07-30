@@ -31,7 +31,7 @@ export function ArticleContent({ html }: ArticleContentProps) {
       </Button>
 
       <div
-        className={`p-6 rounded-2xl shadow-md prose-invert max-w-none ${proseSizes[proseIndex]}`}
+        className={`p-6 rounded-2xl prose-invert max-w-none ${proseSizes[proseIndex]}`}
         dangerouslySetInnerHTML={{ __html: html }}
       />
     </div>

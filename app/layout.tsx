@@ -4,6 +4,7 @@ import './globals.css'
 import { AuthPopup } from '@/components/AuthPopup'
 import { GoogleSignInPopup } from '@/components/GoogleSignInPopup'
 import SessionProvider from '@/components/providers/SessionProvider'
+import { Header } from '@/components/header'
 
 export const metadata: Metadata = {
   title: 'News Meindesk',
@@ -24,6 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <SessionProvider>
         <body className={openSans.className + "min-h-screen bg-[#292a2d]"}>
+          <Header activeTab='/' />
           <GoogleSignInPopup />
           {children}
         </body>
