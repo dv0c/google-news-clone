@@ -36,9 +36,29 @@ export function ArticlesByCategory({ title = "Για εσάς", subtitle = "Πρ
     fetchArticles();
   }, [categories]);
 
-  if (loading) return null
-  if (error) return null
-  if (articles.length === 0) return null
+  if (loading) return (
+    <div className="mt-10">
+      <h1 className="text-white text-[1.75rem] mb-2">{title}</h1>
+      <p className="text-gray-300 text-sm">{subtitle}</p>
+      <div className="mt-6 bg-[#1f1f1f] p-3 rounded-2xl grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {Array.from({ length: 7 }).map((_, index) => (
+          <ArticleItemSkeleton key={index} />
+        ))}
+      </div>
+    </div>
+  )
+  if (error) return (
+    <div className="mt-10">
+      <h1 className="text-white text-[1.75rem] mb-2">{title}</h1>
+      <p className="text-red-500 text-sm">{error}</p>
+    </div>
+  )
+  if (articles.length === 0) return (
+    <div className="mt-10">
+      <h1 className="text-white text-[1.75rem] mb-2">{title}</h1>
+      <p className="text-gray-300 text-sm">Δεν βρέθηκαν άρθρα για αυτήν την κατηγορία.</p>
+    </div>
+  )
 
   return (
     <div className="mt-10">

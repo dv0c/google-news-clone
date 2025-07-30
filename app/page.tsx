@@ -108,7 +108,7 @@ export default function GoogleNewsClone() {
           </div>
         </div>
         <div className="space-y-6">
-          <ArticlesByCategory title="Σπορτς" subtitle="" categories={[
+          <ArticlesByCategory title="Sports" subtitle="Ειδήσεις με βαση τα Sports" categories={[
             "Ποδόσφαιρο",
             "Σπορ",
             "νόριτς",
@@ -116,7 +116,7 @@ export default function GoogleNewsClone() {
             "ποδόσφαιρο",
             "φιλικό"
           ]} />
-          <ArticlesByCategory title="Πολιτικη - Νεα" subtitle="" categories={[
+          <ArticlesByCategory title="Πολιτική - Νεα" subtitle="Ειδήσεις με βαση την πολιτική" categories={[
             "Πολιτική",
             "ΓΙΩΡΓΟΣ ΦΛΩΡΙΔΗΣ",
             "ΔΗΜΗΤΡΗΣ ΚΟΥΤΣΟΥΜΠΑΣ",
