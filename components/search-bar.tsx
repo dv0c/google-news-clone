@@ -172,7 +172,7 @@ export function SearchBar() {
       </div>
 
       {showDropdown && (
-        <div className="absolute w-full  rounded-b-lg bg-[#3c4043] border border-[#3c4043] shadow-lg z-50 max-h-[520px] overflow-y-auto text-white text-sm">
+        <div className="absolute w-full  rounded-b-lg bg-[#3c4043] border border-[#3c4043] shadow-lg z-[100] max-h-[520px] overflow-y-auto text-white text-sm">
           {/* Loading Skeletons */}
           {loading && (
             <>
