@@ -1,6 +1,7 @@
 "use client"
 
 import { ArticleItem } from "@/components/Article"
+import { ArticlesByCategory } from "@/components/ArticlesByCategory"
 import { BreakingNewsBanner } from "@/components/breaking-news"
 import FeedSidebar from "@/components/feed-sidebar"
 import Footer from "@/components/Footer"
@@ -8,6 +9,7 @@ import { Header } from "@/components/header"
 import Heading from "@/components/Heading"
 import { NewsFeed, SkeletonNewsFeed } from "@/components/news-feed"
 import Sources from "@/components/sources"
+import { SwiperSlider } from "@/components/SwiperSlider"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import WeatherWidget from "@/components/weather-widget"
@@ -104,6 +106,26 @@ export default function GoogleNewsClone() {
           <div className="mt-6">
             <Sources />
           </div>
+        </div>
+        <div className="mt-6">
+          <SwiperSlider>
+            <ArticlesByCategory title="Σπορτς" subtitle="" categories={[
+              "Ποδόσφαιρο",
+              "Σπορ",
+              "νόριτς",
+              "ολυμπιακός",
+              "ποδόσφαιρο",
+              "φιλικό"
+            ]} />
+            <ArticlesByCategory title="Πολιτικη - Νεα" subtitle="" categories={[
+              "Πολιτική",
+              "ΓΙΩΡΓΟΣ ΦΛΩΡΙΔΗΣ",
+              "ΔΗΜΗΤΡΗΣ ΚΟΥΤΣΟΥΜΠΑΣ",
+              "ΙΣΡΑΗΛ",
+              "ΚΚΕ",
+              "ΠΑΛΑΙΣΤΙΝΗ"
+            ]} />
+          </SwiperSlider>
         </div>
       </main>
 

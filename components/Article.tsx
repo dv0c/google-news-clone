@@ -222,3 +222,34 @@ export function ArticleItem({ article, variant, isFirst }: ArticleItemProps) {
 
 
 
+
+export function ArticleItemSkeleton({ isFirst }: { isFirst?: boolean }) {
+  return (
+    <article
+      className={clsx(
+        "flex flex-col pt-5 pb-5 animate-pulse",
+        isFirst ? "" : "border-t border-neutral-600"
+      )}
+    >
+      {/* Top bar with favicon & website name */}
+      <div className="flex items-center gap-2 pb-0 relative">
+        <div className="w-4 h-4 bg-gray-600 rounded-full" />
+        <div className="h-3 w-20 bg-gray-600 rounded" />
+      </div>
+
+      {/* Content */}
+      <div className="flex justify-between gap-2 mt-2">
+        <div className="flex flex-col gap-2">
+          {/* Title skeleton */}
+          <div className="h-5 w-40 bg-gray-600 rounded" />
+          <div className="h-5 w-32 bg-gray-600 rounded" />
+          {/* Date skeleton */}
+          <div className="h-3 w-16 bg-gray-600 rounded" />
+        </div>
+
+        {/* Thumbnail skeleton */}
+        <div className="h-[70px] w-[70px] bg-gray-600 rounded-xl" />
+      </div>
+    </article>
+  );
+}
