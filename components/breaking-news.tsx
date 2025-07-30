@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export function BreakingNewsBanner() {
@@ -30,11 +31,17 @@ export function BreakingNewsBanner() {
   if (!breaking) return null;
 
   return (
-    <div className="bg-red-600 text-white text-center p-2 font-bold">
-      BREAKING NEWS:{" "}
-      <a href={'/article/'+breaking.id} target="_blank" className="underline ml-1">
-        {breaking.title}
-      </a>
+    <div className="absolute z-10 w-full">
+      <div className="w-full max-w-fit mx-auto my-3 bg-red-600 text-white px-4 py-2 rounded-md flex items-center gap-2">
+        {/* Pulsing dot */}
+        <div className="w-3 h-3 rounded-full bg-white animate-pulse"></div>
+
+        {/* Text */}
+        <span className="font-bold text-md">Breaking News:</span>
+        <Link href={'/article/' + breaking.link} className="font-semibold text-md hover:underline truncate">
+          {breaking.title}
+        </Link>
+      </div>
     </div>
   );
 }

@@ -5,10 +5,10 @@ import { BreakingNewsBanner } from "@/components/breaking-news"
 import FeedSidebar from "@/components/feed-sidebar"
 import Footer from "@/components/Footer"
 import { Header } from "@/components/header"
+import Heading from "@/components/Heading"
 import { NewsFeed, SkeletonNewsFeed } from "@/components/news-feed"
 import Sources from "@/components/sources"
 import { Button } from "@/components/ui/button"
-import { SidebarMenuSkeleton } from "@/components/ui/sidebar"
 import { Skeleton } from "@/components/ui/skeleton"
 import WeatherWidget from "@/components/weather-widget"
 import { formatDateGR } from "@/lib/formatDateGR"
@@ -44,6 +44,7 @@ export default function GoogleNewsClone() {
     <div className="min-h-screen bg-[#292a2d]">
       <Header activeTab={'/'} />
       <BreakingNewsBanner />
+      <Heading />
       <div className="mb-6 max-w-[1140px] flex-wrap gap-5 px-4 sm:px-2 lg:px-0 py-6 mx-auto flex items-center justify-between">
         <div>
           <Button className="text-white bg-transparent hover:bg-blue-400/10 p-0 hover:p-2 transition-all hover:text-blue-500 rounded-xl">
