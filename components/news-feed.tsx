@@ -111,7 +111,7 @@ export function SkeletonNewsFeed() {
       </div>
 
       {/* Others (3x list items) */}
-      <div className="flex flex-col mt-6">
+      <div className="flex flex-col mt-6 p-4">
         {[...Array(3)].map((_, i) => (
           <div
             key={i}
@@ -134,6 +134,35 @@ export function SkeletonNewsFeed() {
           </div>
         ))}
       </div>
+    </div>
+  )
+}
+
+
+export function ArticleListItemSkeleton() {
+  return (
+    <div className="flex flex-col px-4 py-2 mt-6">
+      {[...Array(8)].map((_, i) => (
+        <div
+          key={i}
+          className="flex flex-col gap-3 pt-5 pb-5 border-t border-neutral-700"
+        >
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded-full bg-neutral-700" />
+            <div className="h-3 w-24 bg-neutral-700 rounded" />
+          </div>
+
+          <div className="flex justify-between gap-4">
+            <div className="flex-1">
+              <div className="h-4 w-full bg-neutral-700 rounded mt-2" />
+              <div className="h-3 w-16 bg-neutral-700 rounded mt-3" />
+            </div>
+            <div className="h-[100px] w-[100px] bg-neutral-800 rounded-xl" />
+          </div>
+
+          <div className="h-3 w-16 bg-neutral-700 rounded" />
+        </div>
+      ))}
     </div>
   )
 }
