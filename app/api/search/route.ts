@@ -36,8 +36,11 @@ export async function GET(req: Request) {
     });
   }
 
-  // 1. Fetch all articles and websites (limit for performance)
-  const [articlesRaw, websitesRaw, allArticles] = await Promise.all([
+  /**
+   * 1. Fetch data in parallel (only minimal fields)
+   * - Fetch more results than needed, Fuse will score/filter them
+   */
+  const [articlesRaw, websitesRaw] = await Promise.all([
     db.article.findMany({
       select: {
         id: true,
@@ -46,8 +49,10 @@ export async function GET(req: Request) {
         link: true,
         thumbnail: true,
         categories: true,
+        pubDate: true,
       },
-      take: 300,
+      take: 500, // for better matching pool
+      orderBy: { createdAt: "desc" },
     }),
     db.website.findMany({
       select: {
@@ -56,47 +61,48 @@ export async function GET(req: Request) {
         url: true,
         favicon: true,
       },
-      take: 100,
-    }),
-    db.article.findMany({
-      select: { categories: true },
-      take: 500,
+      take: 200,
     }),
   ]);
 
-  // 2. Fuzzy search on articles
+  /**
+   * 2. Fuse.js for articles (title, websiteName, categories)
+   */
   const fuseArticles = new Fuse(articlesRaw, {
-    keys: ["title", "websiteName", "categories", "content", "contentSnippet", "contentEncoded"],
-    threshold: 0.2, // adjust sensitivity
+    keys: ["title", "websiteName", "categories"],
+    threshold: 0.3,
     includeScore: true,
   });
 
-  const filteredArticles = fuseArticles.search(rawQuery).map((result) => result.item);
+  const filteredArticles = fuseArticles.search(rawQuery).map((res) => res.item);
 
-  // Paginate articles
   const paginatedArticles = filteredArticles.slice((page - 1) * limit, page * limit);
-
   const articles = paginatedArticles.map((a) => ({
     ...a,
     title: highlight(a.title, rawQuery),
     websiteName: a.websiteName ? highlight(a.websiteName, rawQuery) : null,
   }));
 
-  // 3. Fuzzy search on websites
+  /**
+   * 3. Fuse.js for websites
+   */
   const fuseWebsites = new Fuse(websitesRaw, {
     keys: ["name", "url"],
     threshold: 0.4,
+    includeScore: true,
   });
 
-  const websites = fuseWebsites.search(rawQuery).slice(0, 5).map((r) => r.item);
+  const websites = fuseWebsites.search(rawQuery).slice(0, 6).map((r) => r.item);
 
-  // 4. Fuzzy search on categories
+  /**
+   * 4. Extract & filter categories directly from the matched articles
+   */
   const categoriesSet = new Set<string>();
-  allArticles.forEach(({ categories }) => {
-    if (!categories) return;
-    categories.forEach((cat) => {
-      const catNorm = normalize(cat);
-      if (catNorm.includes(query)) categoriesSet.add(cat);
+  filteredArticles.forEach((article) => {
+    article.categories?.forEach((cat) => {
+      if (normalize(cat).includes(query)) {
+        categoriesSet.add(cat);
+      }
     });
   });
 
@@ -104,6 +110,9 @@ export async function GET(req: Request) {
   const paginatedCategories = categoriesArray.slice((page - 1) * limit, page * limit);
   const categories = paginatedCategories.map((cat) => highlight(cat, rawQuery));
 
+  /**
+   * 5. Return final data
+   */
   return NextResponse.json({
     articles,
     websites,
